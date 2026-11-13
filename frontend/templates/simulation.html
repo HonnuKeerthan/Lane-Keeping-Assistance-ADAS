@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulation – LKA System</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/simulation.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="sim-page">
+
+  <!-- ══════════  NAVIGATION  ══════════ -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon">◈</span>
+      <span class="brand-text">LKA<span class="accent">SIM</span></span>
+    </div>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/simulation" class="nav-link active">Simulation</a>
+    </div>
+    <div class="nav-badge">Software Simulation Only</div>
+  </nav>
+
+  <!-- ══════════  PAGE HEADER  ══════════ -->
+  <div class="sim-header">
+    <div class="header-top">
+      <h1 class="sim-title">FSD-STYLE LKA SIMULATION</h1>
+      <!-- Global LKA Header Status Badge -->
+      <div class="header-mode-badge" id="headerModeBadge">
+        <span class="mode-dot" id="modeDot"></span>
+        <span id="headerModeText">LKA: ACTIVE &nbsp;·&nbsp; ASSISTED</span>
+      </div>
+    </div>
+    <p class="sim-subtitle">Lane Keeping Assistance &nbsp;·&nbsp; Curved Road Simulation &nbsp;·&nbsp; Software Simulation Only</p>
+  </div>
+
+  <!-- ══════════  MAIN THREE-COLUMN LAYOUT  ══════════ -->
+  <div class="sim-layout">
+
+    <!-- ────────  LEFT PANEL: Controls  ──────── -->
+    <aside class="panel panel-left" id="leftPanel">
+
+      <div class="panel-header">
+        <span class="panel-icon">⚙</span> Controls
+      </div>
+
+      <!-- 1. LKA MASTER TOGGLE -->
+      <div class="lka-toggle-card">
+        <div class="ltc-header">
+          <span class="ltc-title">LKA ASSISTANCE</span>
+          <span class="ltc-status active" id="lkaToggleStatus">ACTIVE</span>
+        </div>
+        <div class="ltc-row">
+          <div class="ltc-info">
+            <div class="ltc-mode-text" id="ltcModeText">LKA ASSISTED</div>
+            <div class="ltc-hint" id="ltcHint">Automatic corrective steering enabled</div>
+          </div>
+          <!-- Toggle switch -->
+          <label class="switch" for="lkaSwitch">
+            <input type="checkbox" id="lkaSwitch" checked />
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 2. ROAD GEOMETRY SELECTION PANEL -->
+      <div class="control-group">
+        <div class="ctrl-header-row">
+          <label class="ctrl-label">Road Geometry</label>
+          <span class="ctrl-subbadge" id="currentRoadSubbadge">Straight</span>
+        </div>
+        <div class="road-grid" id="roadGrid">
+          <button class="road-btn active" data-road="straight" id="btnRoadStraight">
+            <span class="rb-icon">🛣️</span>
+            <span class="rb-name">Straight</span>
+          </button>
+          <button class="road-btn" data-road="gentle_left" id="btnRoadGentleLeft">
+            <span class="rb-icon">↰</span>
+            <span class="rb-name">Gentle Left</span>
+          </button>
+          <button class="road-btn" data-road="gentle_right" id="btnRoadGentleRight">
+            <span class="rb-icon">↱</span>
+            <span class="rb-name">Gentle Right</span>
+          </button>
+          <button class="road-btn" data-road="sharp_left" id="btnRoadSharpLeft">
+            <span class="rb-icon">⮢</span>
+            <span class="rb-name">Sharp Left</span>
+          </button>
+          <button class="road-btn" data-road="sharp_right" id="btnRoadSharpRight">
+            <span class="rb-icon">⮣</span>
+            <span class="rb-name">Sharp Right</span>
+          </button>
+          <button class="road-btn" data-road="s_curve" id="btnRoadSCurve">
+            <span class="rb-icon">〰</span>
+            <span class="rb-name">S-Curve</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. ACTION BUTTONS -->
+      <div class="control-group action-buttons-group">
+        <button class="btn btn-primary btn-full" id="btnStart">
+          ▶&nbsp; Start Simulation
+        </button>
+        <button class="btn btn-danger btn-full" id="btnStop" disabled>
+          ■&nbsp; Stop Simulation
+        </button>
+        <button class="btn btn-warning btn-full" id="btnResetVehicle">
+          ↺&nbsp; Reset Vehicle (Center)
+        </button>
+        <button class="btn btn-secondary btn-full" id="btnReset">
+          ⟲&nbsp; Full Reset
+        </button>
+      </div>
+
+      <!-- 4. VIDEO SOURCE (Uploaded or Sample) -->
+      <details class="control-group video-source-details">
+        <summary class="ctrl-label video-source-summary">
+          <span>📹 Video Source (Recorded Dashcam)</span>
+          <span class="summary-arrow">▼</span>
+        </summary>
+
+        <div class="file-drop-zone" id="dropZone">
+          <div class="drop-icon">📁</div>
+          <div class="drop-text">Drop video here or</div>
+          <label class="btn btn-outline btn-sm" for="videoFileInput">Browse</label>
+          <input type="file" id="videoFileInput" accept=".mp4,.avi,.mov,.mkv" hidden />
+          <div class="drop-hint">MP4 · AVI · MOV · MKV</div>
+        </div>
+
+        <div class="or-divider"><span>or sample clips</span></div>
+
+        <div id="sampleList" class="sample-list">
+          <div class="loading-samples">Loading samples…</div>
+        </div>
+      </details>
+
+      <!-- Selected file display -->
+      <div class="selected-file" id="selectedFileDisplay" style="display:none;">
+        <span class="sf-icon">🎬</span>
+        <span class="sf-name" id="selectedFileName">—</span>
+        <button class="sf-clear" id="sfClearBtn" title="Clear video and use curved road">✕</button>
+      </div>
+
+      <!-- System info -->
+      <div class="info-box" id="systemInfo">
+        <div class="ib-row">
+          <span class="ib-key">Engine</span>
+          <span class="ib-val" id="sysMode">Curved Simulator</span>
+        </div>
+        <div class="ib-row">
+          <span class="ib-key">Status</span>
+          <span class="ib-val" id="sysStatus">IDLE</span>
+        </div>
+        <div class="ib-row">
+          <span class="ib-key">FPS</span>
+          <span class="ib-val" id="sysFps">—</span>
+        </div>
+        <div class="ib-row">
+          <span class="ib-key">Curvature (κ)</span>
+          <span class="ib-val" id="sysCurvature">0.0000</span>
+        </div>
+      </div>
+
+      <!-- Pipeline diagram -->
+      <div class="mini-pipeline">
+        <div class="mp-title">Processing Pipeline</div>
+        <div class="mp-steps">
+          <div class="mp-step active">3D Curved Geometry</div>
+          <div class="mp-arrow">↓</div>
+          <div class="mp-step">Lane Boundary Detection</div>
+          <div class="mp-arrow">↓</div>
+          <div class="mp-step">Deviation Calculation</div>
+          <div class="mp-arrow">↓</div>
+          <div class="mp-step">LKA PD Controller</div>
+          <div class="mp-arrow">↓</div>
+          <div class="mp-step">Steering Actuation</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ────────  CENTRE PANEL: Video + Charts  ──────── -->
+    <main class="panel panel-centre">
+
+      <!-- Video feed container -->
+      <div class="video-container" id="videoContainer">
+        <div class="video-placeholder" id="videoPlaceholder">
+          <div class="vp-icon">🚗</div>
+          <div class="vp-title">LKA Simulation Engine Ready</div>
+          <div class="vp-text">Select a Road Geometry and press <strong>Start Simulation</strong></div>
+        </div>
+        <img id="videoFeed" class="video-feed" src="" alt="Live feed" style="display:none;" />
+
+        <!-- Overlay HUD badges -->
+        <div class="vid-badge vid-badge-tl active" id="badgeLKA">LKA: ACTIVE</div>
+        <div class="vid-badge vid-badge-tc" id="badgeLDW" style="display:none;">⚠️ LANE DEPARTURE WARNING</div>
+        <div class="vid-badge vid-badge-tr" id="badgeRoad">Straight Road</div>
+        <div class="vid-badge vid-badge-br" id="badgeFPS">FPS: —</div>
+        <div class="vid-badge vid-badge-bl" id="badgeMode">MODE: LKA ASSISTED</div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Lane Deviation vs Time (m)</span>
+            <span class="chart-sub">Safe Zone: ±0.75m</span>
+          </div>
+          <canvas id="deviationChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Steering Correction vs Time (°)</span>
+            <span class="chart-sub" id="steeringChartSub">Active LKA (0° when OFF)</span>
+          </div>
+          <canvas id="steeringChart"></canvas>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ────────  RIGHT PANEL: Status  ──────── -->
+    <aside class="panel panel-right" id="rightPanel">
+
+      <div class="panel-header">
+        <span class="panel-icon">◉</span> LKA Telemetry
+      </div>
+
+      <!-- LKA Active/Disabled indicator -->
+      <div class="lka-indicator active" id="lkaIndicator">
+        <div class="lka-pulse active" id="lkaPulse"></div>
+        <div class="lka-label" id="lkaLabel">ACTIVE</div>
+        <div class="lka-sublabel" id="lkaSublabel">ASSISTED</div>
+      </div>
+
+      <!-- Status cards -->
+      <div class="status-cards">
+
+        <!-- Lane Status Card -->
+        <div class="status-card good" id="cardLaneStatus">
+          <div class="sc-label">LANE STATUS</div>
+          <div class="sc-value centered" id="valLaneStatus">CENTERED</div>
+        </div>
+
+        <!-- Steering Decision Card -->
+        <div class="status-card good" id="cardSteering">
+          <div class="sc-label">STEERING DECISION</div>
+          <div class="sc-value steering-value straight" id="valSteering">KEEP STRAIGHT</div>
+        </div>
+
+        <!-- Steering Correction Angle Card -->
+        <div class="status-card" id="cardSteerAngle">
+          <div class="sc-label">STEERING CORRECTION</div>
+          <div class="sc-value" id="valSteerAngle">0.0°</div>
+        </div>
+
+        <!-- Deviation Card with Bar -->
+        <div class="status-card" id="cardDeviation">
+          <div class="sc-label">LANE DEVIATION</div>
+          <div class="sc-value" id="valDeviation">0.00 m</div>
+          <!-- Deviation bar -->
+          <div class="dev-bar-wrap">
+            <div class="dev-bar-track">
+              <div class="dev-bar-fill" id="devBarFill"></div>
+              <div class="dev-bar-centre"></div>
+            </div>
+            <div class="dev-bar-labels">
+              <span>◀ Left</span><span>Right ▶</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Road Type & Curvature -->
+        <div class="status-card" id="cardRoadType">
+          <div class="sc-label">ROAD GEOMETRY</div>
+          <div class="sc-value" id="valRoadType">Straight Road</div>
+        </div>
+
+        <!-- Lane Departure Warning Card -->
+        <div class="status-card good" id="cardLDW">
+          <div class="sc-label">LANE DEPARTURE STATUS</div>
+          <div class="sc-value" id="valLDW">SAFE</div>
+        </div>
+
+      </div>
+
+      <!-- Steering visualiser -->
+      <div class="steering-viz" id="steeringViz">
+        <div class="sv-title">Steering Visualiser</div>
+        <div class="sv-road" id="svRoad">
+          <div class="sv-lane-left"></div>
+          <div class="sv-lane-right"></div>
+          <div class="sv-car" id="svCar">🚗</div>
+          <div class="sv-arrow" id="svArrow">⬆</div>
+        </div>
+        <div class="sv-label" id="svLabel">KEEP STRAIGHT</div>
+      </div>
+
+    </aside>
+
+  </div><!-- end .sim-layout -->
+
+  <!-- Toast notifications -->
+  <div id="toast" class="toast" style="display:none;"></div>
+
+  <footer class="site-footer">
+    <p>LKA Simulation &nbsp;|&nbsp; FSD-Style Simulation &nbsp;|&nbsp; Software Simulation Only &nbsp;|&nbsp;
+       Built with Python · Flask · OpenCV · Chart.js</p>
+  </footer>
+
+  <script src="/static/js/simulation.js"></script>
+</body>
+</html>

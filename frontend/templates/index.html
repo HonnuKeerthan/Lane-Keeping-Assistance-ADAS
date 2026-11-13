@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LKA Simulation – Lane Keeping Assistance</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="home-page">
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon">◈</span>
+      <span class="brand-text">LKA<span class="accent">SIM</span></span>
+    </div>
+    <div class="nav-links">
+      <a href="/" class="nav-link active">Home</a>
+      <a href="/simulation" class="nav-link">Simulation</a>
+    </div>
+    <div class="nav-badge">Software Simulation Only</div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="home-main">
+    <div class="hero-container">
+
+      <!-- Left: Text -->
+      <div class="hero-text">
+        <div class="hero-tag">🎓 College Engineering Project</div>
+        <h1 class="hero-title">
+          Lane Keeping<br/>
+          <span class="hero-accent">Assistance</span><br/>
+          Simulation
+        </h1>
+        <p class="hero-subtitle">
+          A classical computer-vision pipeline that detects lane lines from
+          dashcam footage, estimates vehicle deviation, and generates
+          real-time steering recommendations — all inside the browser.
+        </p>
+
+        <div class="hero-disclaimer">
+          ⚠️ This is a <strong>software simulation only</strong>. Not a real
+          FSD or autonomous driving system. No machine learning or real vehicle
+          hardware is used.
+        </div>
+
+        <div class="hero-actions">
+          <a href="/simulation" class="btn btn-primary btn-large">
+            Launch Simulation &nbsp;→
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: Feature cards -->
+      <div class="hero-cards">
+
+        <div class="feature-card">
+          <div class="fc-icon">🎥</div>
+          <div class="fc-body">
+            <h3>Video Input</h3>
+            <p>Upload MP4 / AVI / MOV or use a built-in sample dashcam clip.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-icon">🔍</div>
+          <div class="fc-body">
+            <h3>Classical CV Pipeline</h3>
+            <p>Grayscale → Gaussian Blur → Canny → ROI → Hough Lines</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-icon">📐</div>
+          <div class="fc-body">
+            <h3>Lane Deviation</h3>
+            <p>Calculates pixel deviation converted to metres in real time.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-icon">🚗</div>
+          <div class="fc-body">
+            <h3>Steering Decisions</h3>
+            <p>KEEP STRAIGHT · STEER LEFT · STEER RIGHT based on lane geometry.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-icon">📊</div>
+          <div class="fc-body">
+            <h3>Live Charts</h3>
+            <p>Real-time deviation and steering-correction charts via Chart.js.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-icon">🖥️</div>
+          <div class="fc-body">
+            <h3>FSD-Style Dashboard</h3>
+            <p>Dark HUD-style interface with status cards and annotated video feed.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Pipeline section -->
+    <section class="pipeline-section">
+      <h2 class="section-title">Detection Pipeline</h2>
+      <div class="pipeline-steps">
+        <div class="pipe-step"><span class="ps-num">01</span><span class="ps-label">Read Frame</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><span class="ps-num">02</span><span class="ps-label">Grayscale</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><span class="ps-num">03</span><span class="ps-label">Gaussian Blur</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><span class="ps-num">04</span><span class="ps-label">Canny Edges</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><span class="ps-num">05</span><span class="ps-label">ROI Mask</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><span class="ps-num">06</span><span class="ps-label">Hough Lines</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><span class="ps-num">07</span><span class="ps-label">Lane Status</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><span class="ps-num">08</span><span class="ps-label">Steering Decision</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>LKA Simulation &nbsp;|&nbsp; FSD-Style Simulation &nbsp;|&nbsp; Software Simulation Only</p>
+    <p>Built with Python · Flask · OpenCV · Chart.js</p>
+  </footer>
+
+</body>
+</html>
